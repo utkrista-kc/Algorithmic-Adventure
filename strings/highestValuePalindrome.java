@@ -15,80 +15,42 @@ class Result {
 
     public static String highestValuePalindrome(String s, int n, int k) {
         // Write your code here
-        System.out.println("string: " + s);
         int mismatchCount = 0;
         char[] charArray = s.toCharArray();
         for (int i = 0; i < n / 2; i++) {
             if (charArray[i] != charArray[n - i - 1]) {
-                mismatchCount += 1;
+                char maxValue = (char) Math.max(charArray[i], charArray[n - i - 1]);
+                charArray[i] = charArray[n - i - 1] = maxValue;
+                k--;
             }
         }
-
-        System.out.println("mismatch: " + mismatchCount);
-
-        if (k < mismatchCount) {
+        if (k < 0)
             return "-1";
-        }
+
         int start = 0;
         int end = n - 1;
-
         while (start <= end) {
-            if (k < 1) {
-                break;
-            }
-            if (charArray[start] != charArray[end]) {
-                if (k > 1 && (k - 2) >= mismatchCount - 1) {
-                    if (charArray[start] != '9') {
-                        charArray[start] = '9';
-                        k--;
-                    }
-                    if (charArray[end] != '9') {
-                        charArray[end] = '9';
-                        k--;
-                    }
-
-                } else {
-                    if (charArray[start] > charArray[end]) {
-                        charArray[end] = charArray[start];
-                    } else {
-                        charArray[start] = charArray[end];
-                    }
-                    k--;
-                }
-                mismatchCount--;
-            } else {
-                if (k > 1 && (k - 2) >= mismatchCount && charArray[start] != '9') {
-                    charArray[start] = '9';
-                    charArray[end] = '9';
-                    k -= 2;
-                }
-            }
             if (start == end && k > 0) {
                 charArray[start] = '9';
                 k--;
             }
-            start++;
-            end--;
-        }
-
-        s = String.valueOf(charArray);
-        System.out.println("resulting string: " + s);
-        boolean isPalindrome = isPalindrome(s);
-        return isPalindrome ? s : "-1";
-
-    }
-
-    public static boolean isPalindrome(String s) {
-        int start = 0;
-        int end = s.length() - 1;
-        while (start <= end) {
-            if (s.charAt(start) != s.charAt(end)) {
-                return false;
+            if (charArray[start] < '9') {
+                if (k >= 2 && charArray[start] == s.charAt(start) && charArray[end] == s.charAt(end)) {
+                    charArray[start] = '9';
+                    charArray[end] = '9';
+                    k -= 2;
+                } else if (k >= 1 && (charArray[start] != s.charAt(start) || charArray[end] != s.charAt(end))) {
+                    charArray[start] = '9';
+                    charArray[end] = '9';
+                    k--;
+                }
             }
+
             start++;
             end--;
         }
-        return true;
+        return String.valueOf(charArray);
+
     }
 
 }
