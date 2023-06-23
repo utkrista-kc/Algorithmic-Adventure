@@ -19,31 +19,38 @@ public class Solution {
 
     static void quickSort(int[] arr, int start, int end) {
         if (start < end) {
+            System.out.println("quick sort = " + start + "end= " + end);
             int partition = partition(arr, start, end);
-            partition(arr, start, partition - 1);
-            partition(arr, partition + 1, end);
+            quickSort(arr, start, partition - 1);
+            quickSort(arr, partition + 1, end);
+
         }
     }
 
     static int partition(int[] arr, int start, int end) {
+        System.out.println("start= " + start + "end " + end);
         int pivot = arr[end];
-        int i = 0;
+        int i = start;
         int j = end - 1;
         while (i < j && i <= end && j >= start) {
-            while (arr[i] <= pivot) {
+            while (arr[i] <= pivot && i <= end - 1) {
                 i++;
             }
-            while (arr[j] >= pivot) {
+            while (arr[j] >= pivot && j >= start) {
                 j--;
             }
+            System.out.println("i= " + i + "j= " + j);
             if (i < j) {
+                System.out.println("inside swap");
                 int temp = arr[i];
                 arr[i] = arr[j];
                 arr[j] = temp;
+                printArray(arr);
             }
         }
         arr[end] = arr[j + 1];
         arr[j + 1] = pivot;
+        System.out.println("whole swap");
         printArray(arr);
         return j + 1;
     }
